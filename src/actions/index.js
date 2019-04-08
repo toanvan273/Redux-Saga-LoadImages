@@ -1,6 +1,6 @@
 import { IMAGES, STATS } from '../constants'
 
-const loadImages = () => ({
+const isloadImages = () => ({
     type: IMAGES.LOAD,  //'IMAGES_LOAD
 })
 
@@ -30,4 +30,4 @@ const setImagesStatsError = id => ({
     id
 })
 
-export { loadImages, setImages, setError, loadImagesStats, setImagesStats, setImagesStatsError }
+export { isloadImages, setImages, setError, loadImagesStats, setImagesStats, setImagesStatsError }

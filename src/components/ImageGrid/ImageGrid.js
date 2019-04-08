@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import './styles.css';
-import { loadImages } from '../../actions'
+import { isloadImages } from '../../actions'
 import Button from '../Button/Button';
 import Stats from '../Stats/Stats'
 
@@ -15,7 +15,7 @@ class ImageGrid extends Component {
     //     console.log("componentWillMount")
     // }
     componentDidMount() {
-        this.props.loadImages()
+        this.props.isloadImages()
         // fetch(`https://api.unsplash.com/photos/?client_id=${key}&per_page=28`)
         //     .then(res => res.json())
         //     .then(images => {
@@ -47,7 +47,7 @@ class ImageGrid extends Component {
     // }
 
     render() {
-        const { images, error, isLoading, loadImages, imagesStats } = this.props; // gán tất cả thành các props --> chuẩn bị xuất vào Components
+        const { images, error, isLoading, isloadImages, imagesStats } = this.props; // gán tất cả thành các props --> chuẩn bị xuất vào Components
         return (
             <div className="content">
                 <section className="grid">
@@ -69,7 +69,7 @@ class ImageGrid extends Component {
                     {/* <a onClick={this.props.loadImages}>Load Images</a> */}
                 </section>
                 {error && <div className="error">{JSON.stringify(error)}</div>}
-                <Button onClick={() => !isLoading && loadImages()} loading={isLoading}>
+                <Button onClick={() => !isLoading && isloadImages()} loading={isLoading}>
                     Load More
                 </Button>
             </div>
@@ -78,7 +78,7 @@ class ImageGrid extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({  // phát đi tất cả những action (or tín hiệu) khi loadImages được gọi
-    loadImages: () => dispatch(loadImages()),
+    isloadImages: () => dispatch(isloadImages()),
 })
 
 const mapStateToProps = ({ isLoading, images, error, imagesStats }) => ({ // chuyển tất cả state (trong reducer) --> thành props của Component
