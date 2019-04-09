@@ -1,61 +1,40 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import './styles.css';
-import { isloadImages } from '../../actions'
+import { loadImages } from '../../actions';
 import Button from '../Button/Button';
-import Stats from '../Stats/Stats'
+import Stats from '../Stats/Stats';
 
-// const key = '5f96323678d05ff0c4eb264ef184556868e303b32a2db88ecbf15746e6f25e02';
 
 class ImageGrid extends Component {
-    // state = {  // đặt state với biến images kiểu mảng []
-    //     images: [], 
-    // // };
-    // componentWillMount() {
-    //     console.log("componentWillMount")
-    // }
-    componentDidMount() {
-        this.props.isloadImages()
-        // fetch(`https://api.unsplash.com/photos/?client_id=${key}&per_page=28`)
-        //     .then(res => res.json())
-        //     .then(images => {
-        //         this.setState({
-        //             images,
-        //         });
-        //     });
+    constructor() {
+        super();
+        this.state = {
+            number: '',
+        };
     }
-    // componentWillReceiveProps(nextProps) {
-    //     // if (nextProps.isLoading === true) {
-    //     //     alert("Đang load")
-    //     // } else {
-    //     //     alert("Load xong")
-    //     // }
-    //     console.log("componentWillReceiveProps", nextProps)
-    // }
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     console.log("shouldComponentUpdate", nextProps, nextState)
-    //     return true;
-    // }
-    // componentWillUpdate(nextProps, nextState) {
-    //     console.log("componentWillUpdate", nextProps, nextState)
-    // }
-    // componentDidUpdate(prevProps, prevState) {
-    //     console.log("componentDidUpdate", prevProps, prevState)
-    // }
-    // componentWillUnmount() {
-    //     console.log("componentWillUnmount")
-    // }
+    update(e) {
+        this.setState({ number: e.target.value });
+    }
 
     render() {
-        const { images, error, isLoading, isloadImages, imagesStats } = this.props; // gán tất cả thành các props --> chuẩn bị xuất vào Components
+        const { images, error, isLoading, loadImages, imagesStats } = this.props; // gán tất cả thành các props --> chuẩn bị xuất vào Components
+
+        console.log(isLoading);
         return (
             <div className="content">
+
+                <p>Page: {this.state.number}</p>
+                <input placeholder="Nhap so trang" onChange={this.update.bind(this)} />
+                <Button onClick={() => loadImages(this.state.number)}>
+                    Load More
+                </Button>
                 <section className="grid">
                     {images.map(image => (
                         <div
                             key={image.id}
                             className={`item item-${Math.ceil(
-                                image.height / image.width
+                                image.height / image.width,
                             )}`}
                         >
                             <Stats stats={imagesStats[image.id]} />
@@ -66,26 +45,19 @@ class ImageGrid extends Component {
                         </div>
                     ))}
 
-                    {/* <a onClick={this.props.loadImages}>Load Images</a> */}
                 </section>
                 {error && <div className="error">{JSON.stringify(error)}</div>}
-                <Button onClick={() => !isLoading && isloadImages()} loading={isLoading}>
-                    Load More
-                </Button>
             </div>
         );
     }
 }
 
-const mapDispatchToProps = dispatch => ({  // phát đi tất cả những action (or tín hiệu) khi loadImages được gọi
-    isloadImages: () => dispatch(isloadImages()),
-})
 
-const mapStateToProps = ({ isLoading, images, error, imagesStats }) => ({ // chuyển tất cả state (trong reducer) --> thành props của Component
+const mapStateToProps = ({ isLoading, images, error, imagesStats }) => ({
     isLoading,
     images,
     error,
-    imagesStats
-})
+    imagesStats,
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImageGrid)
+export default connect(mapStateToProps, { loadImages })(ImageGrid);
